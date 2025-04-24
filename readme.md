@@ -1,14 +1,14 @@
 # NSD_cogsci Dataset - Annotation & README  
-**Author:** Coco  
-**Date:** April 23, 2025  
+**Author:** Coco Wang  
+**Date:** April 23, 2025   
 **Lab:** Prof. Reza Farivar's Lab, McGill University  
 
 ---
 
 ## Project Summary  
-This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course (COG 444). The project pecifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
+This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course (COG 444). The project specifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
 
-Analyses include generating ROI-based Representational Dissimilarity Matrices (RDMs), bootstrapping topological features, and stimulus-trial-matching for further Vietoris-Rips (VR) graph visualization.
+Analyses include generating ROI-based Representational Dissimilarity Matrices (RDMs), bootstrapping topological features of Persistence Diagrams (PD), and stimulus-trial-matching for further Vietoris-Rips (VR) graph visualization.
 ### Important Links
 - Documentation of `TDApplied` R package used during analysis: https://cran.r-project.org/web/packages/TDApplied/vignettes/ML_and_Inference.html
 - Natural Scenes Dataset (NSD): https://naturalscenesdataset.org
@@ -136,6 +136,12 @@ Reads `nsd.experiment.mat` in MATLAB `.mat` format.
 
 ---
 
-## 📝 Notes  
-- `.Rprofile`: Prevents VSCode from triggering unnecessary linter warnings related to `lintr.linters`. Not related to analysis.  
+## Notes  
 - All file paths should be updated with relative paths.
+
+## References
+1. Kriegeskorte, N., Mur, M., and Bandettini, P. (2008). Representational similarity analysis – connecting the branches of systems neuroscience. Front. systems neuroscience 2, 4. https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/neuro.06.004.2008/full
+2. Brown, S., & Farivar, R. (2024). The Topology of Representational Geometry. bioRxiv, 2024-02.https://www.biorxiv.org/content/10.1101/2024.02.16.579506v1
+3. Allen, E.J., St-Yves, G., Wu, Y. et al. (2022). A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence.Nat Neurosci 25, 116–126. https://doi.org/10.1038/s41593-021-00962-x
+4. Atlases — neuroimaging core 0.1.1 documentation. (n.d.). Retrieved from https://neuroimaging-core-docs.readthedocs.io/en/latest/pages/atlases.html#id4
+5. Brown, S., & Farivar, R. (2025, January 20). Machine Learning and Inference for Topological Data Analysis. Retrieved from https://cran.r-project.org/web/packages/TDApplied/vignettes/ML_and_Inference.html
