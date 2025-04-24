@@ -40,7 +40,8 @@ Contains everything related to final report and poster for this project.
 
 ## Key Tables  
 
-### `beta_matrix_new_roi.csv.zip` (2.4GB)  
+### `beta_matrix_new_roi.csv` (2.4GB)  
+- Produced by running `nsd.py`
 - Shape: `[#Nodes 163,842 x #Trials 750]`  
 - Description: Beta values of Subject 1’s first session, matched to ROIs based on the `lh.HCP_MMP1.mgz` atlas.  
 - Unit: fMRI beta values (no specific physical unit, normalized activation).  
@@ -93,18 +94,19 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
   - `select_subject.sql`: SQL query that will select all information regarding the chosen subject
   - `subj1_trial_mapping.sql`: SQL query that will produce trial to NSDid matching of chosen subject (`subj1_trial_mapping.csv`)
 
-### `nsdtransfer.py`  
-- Inputs: `beta_matrix_new_roi.csv`
-- Outputs: None  
-- Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
-
 ### `nsd.py`  
 - Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
 - Outputs: `beta_matrix_new_roi.csv`  
 - Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
+### `nsdtransfer.py`  
+- Inputs: `beta_matrix_new_roi.csv` (by running `nsd.py`)
+- Outputs: None  
+- Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
+
+
 ### `produce_RDM.py`  
-- Input: `beta_matrix_new_roi.csv`  
+- Input: `beta_matrix_new_roi.csv` (by running `nsd.py`)
 - Output: 7 ROI-based RDMs (CSV)  
 - Metric: Spearman correlation distance (1 - ρ)
 - Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance
