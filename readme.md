@@ -6,13 +6,13 @@
 ---
 
 ## Project Summary  
-This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course. The project pecifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
+This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course (COG 444). The project pecifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
 
 Analyses include generating ROI-based Representational Dissimilarity Matrices (RDMs), bootstrapping topological features, and stimulus-trial-matching for further Vietoris-Rips (VR) graph visualization.
 ### Important Links
 - Documentation of `TDApplied` R package used during analysis: https://cran.r-project.org/web/packages/TDApplied/vignettes/ML_and_Inference.html
 - Natural Scenes Dataset (NSD): https://naturalscenesdataset.org
-- The following data from NSD are used for analysis. Download them from NSD following their file paths:
+- The following large dataset from NSD are used for analysis. Download them from NSD following their file paths:
   - lh.betas_session01.mgh: `natural-scenes-dataset` > `nsddata_betas` > `ppdata` > `subj01` > `fsaverage` > `betas_fithrf`
   - nsd_stimuli.hdf5: `natural-scenes-dataset` > `nsddata_stimuli` > `stimuli` > `nsd`
 
@@ -77,7 +77,7 @@ Useful for topological data analysis (TDA) and comparing topological features ac
 ### `plotVR.r`  
 Plots a single VR graph combining all topological features of a given RDM.
 
-### `plotVR_separate.r`  (optional)
+### `plotVR_separate.r`  _(optional)_
 Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g., 0D, 1D holes) of a given RDM.
 
 
