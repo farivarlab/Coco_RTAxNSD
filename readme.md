@@ -6,7 +6,7 @@
 ---
 
 ## Project Summary  
-This repository contains data and code used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course. The project pecifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
+This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course. The project pecifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
 
 Analyses include generating ROI-based Representational Dissimilarity Matrices (RDMs), bootstrapping topological features, and stimulus-trial-matching for further Vietoris-Rips (VR) graph visualization.
 ### Important Links
@@ -95,17 +95,17 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 ### `nsd.py`  
 - Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
-- Outputs: `beta_matrix_new_roi.csv`  (table already provided)
+- Outputs: `beta_matrix_new_roi.csv`  _(table already provided)_
 - Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
 ### `nsdtransfer.py`  
-- Inputs: `beta_matrix_new_roi.csv` 
+- Inputs: `beta_matrix_new_roi.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
 
 
 ### `produce_RDM.py`  
-- Input: `beta_matrix_new_roi.csv` (by running `nsd.py`)
+- Input: `beta_matrix_new_roi.csv`
 - Output: 7 ROI-based RDMs (CSV)  
 - Metric: Spearman correlation distance (1 - ρ)
 - Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance
