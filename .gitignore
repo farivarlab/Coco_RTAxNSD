@@ -1,0 +1,8 @@
+#ignore folders
+lh.betas_session01.mgh
+beta_matrix_new_roi.csv
+beta_matrix_new_roi.csv.zip
+nsd_stimuli.hdf5
+.Rprofile
+readRegionCSV.py
+.DS_Store
