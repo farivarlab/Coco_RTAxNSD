@@ -40,8 +40,7 @@ Contains everything related to final report and poster for this project.
 
 ## Key Tables  
 
-### `beta_matrix_new_roi.csv` (2.4GB)  
-- Produced by running `nsd.py`
+### `beta_matrix_new_roi.csv.zip` (2.4GB)  
 - Shape: `[#Nodes 163,842 x #Trials 750]`  
 - Description: Beta values of Subject 1’s first session, matched to ROIs based on the `lh.HCP_MMP1.mgz` atlas.  
 - Unit: fMRI beta values (no specific physical unit, normalized activation).  
@@ -96,11 +95,11 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 ### `nsd.py`  
 - Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
-- Outputs: `beta_matrix_new_roi.csv`  
+- Outputs: `beta_matrix_new_roi.csv`  (table already provided)
 - Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
 ### `nsdtransfer.py`  
-- Inputs: `beta_matrix_new_roi.csv` (by running `nsd.py`)
+- Inputs: `beta_matrix_new_roi.csv` 
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
 
