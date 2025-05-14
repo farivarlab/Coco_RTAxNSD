@@ -84,33 +84,53 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 ---
 
-## Python  
+## Python 
+### 1. 🌟 To calculate your data:
+#### `nsd_to_csv.py` 
+- Scale: single trial of a single subject (163,842 x 750) 
+- Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
+- Outputs: `beta_matrix_new_roi.csv`  _(table already provided)_
+- Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
-### `nsd_stim_info_transfer.py`  
+
+#### `nsd_to_RDM_RSA_single.py`  
+- Scale: single trial of a single subject (163,842 x 750)
+- Input: `beta_matrix_new_roi.csv`
+- Output: 7 ROI-based RDMs (CSV), 1 RSA matrices 
+- Metric: Spearman correlation distance (1 - ρ)
+- Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance on a single session of a subject. AND perform RSA on the given ROIs.
+
+#### `nsd_to_RDM_RSA_full.py` 
+- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
+- Input: `beta_matrix_new_roi.csv`
+- Output: 7x40 ROI-based RDMs (CSV) at `data/all_session_rdms.npy`, 40 RSA matrices at `data/all_session_rsa_matrices.npy`
+- Metric: Spearman correlation distance (1 - ρ)
+- Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance on full 40 sessions of a single subject. AND all RSA matrices performed on the given ROIs.
+
+
+### 2. To read/ transfer your data:
+#### `visualize_RDM_full.py`  
+- Scale: single trial of a single subject (163,842 x 750), 40 trial of a single subject (163,842 x 750 x 40)
+- Inputs: `all_session_rdms.npy`,`all_session_rsa_matrices.npy`
+- Outputs: visualization of single session RSA, RDM of a single ROI, or all of them  
+
+#### `nsd_stim_info_transfer.py`  
+- Scale: single trial of a single subject (163,842 x 750)
 - Inputs: `nsd_stim_info_merged.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data preprocessing. 
   - `select_subject.sql`: SQL query that will select all information regarding the chosen subject
   - `subj1_trial_mapping.sql`: SQL query that will produce trial to NSDid matching of chosen subject (`subj1_trial_mapping.csv`)
 
-### `nsd.py`  
-- Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
-- Outputs: `beta_matrix_new_roi.csv`  _(table already provided)_
-- Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
-### `nsdtransfer.py`  
+
+#### `nsdtransfer.py`  
+- Scale: single trial of a single subject (163,842 x 750)
 - Inputs: `beta_matrix_new_roi.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
 
-
-### `produce_RDM.py`  
-- Input: `beta_matrix_new_roi.csv`
-- Output: 7 ROI-based RDMs (CSV)  
-- Metric: Spearman correlation distance (1 - ρ)
-- Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance
-
-### `readpkl.py`  
+#### `readpkl.py`  
 Reads `nsd.experiment.mat` in MATLAB `.mat` format.  
 - Purpose: Accesses metadata such as timing, image presentation order, etc.
 

@@ -3,10 +3,10 @@ import pandas as pd
 
 # This script transfer the beta values table to Azure Data Studio SQL Server database for data preprocessing.
 # Database connection details
-server = 'localhost'  # e.g., 'localhost' or 'yourserver.database.windows.net'
-database = ''
-username = ''
-password = ''
+server = "127.0.0.1"  # e.g., 'localhost' or 'yourserver.database.windows.net'
+database = "nsd"
+username = "sa"
+password = "Laoniubusi123,"
 driver = '{ODBC Driver 17 for SQL Server}'
 
 # Connect to SQL Server
@@ -16,11 +16,11 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 
 # Load the CSV file into a pandas DataFrame
-csv_path = "beta_matrix_new_roi.csv"
+csv_path = "beta_matrix_new_roi02.csv"
 df = pd.read_csv(csv_path)
 
 # Generate the CREATE TABLE SQL statement dynamically
-table_name = "BetaMatrix_HCP_MMP1"
+table_name = "BetaMatrix_HCP_MMP1_02"
 num_conditions = len(df.columns) - 2  # Number of condition columns
 
 columns_sql = ",\n    ".join([f"Condition_{i} FLOAT" for i in range(1, num_conditions + 1)])
