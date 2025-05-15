@@ -123,12 +123,17 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
   - `subj1_trial_mapping.sql`: SQL query that will produce trial to NSDid matching of chosen subject (`subj1_trial_mapping.csv`)
 
 
-
 #### `nsdtransfer.py`  
 - Scale: single trial of a single subject (163,842 x 750)
 - Inputs: `beta_matrix_new_roi.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
+
+
+### 3. Helper functions:
+#### `checkShape.py`  
+- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
+- Purpose: Accesses metadata such as timing, image presentation order, etc.
 
 #### `readpkl.py`  
 Reads `nsd.experiment.mat` in MATLAB `.mat` format.  
