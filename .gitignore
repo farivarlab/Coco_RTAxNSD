@@ -5,3 +5,4 @@ nsd_stimuli.hdf5
 .Rprofile
 readRegionCSV.py
 .DS_Store
+all_session*
