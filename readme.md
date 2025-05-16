@@ -102,10 +102,16 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 #### `nsd_to_RDM_RSA_full.py` 
 - Scale: 40 trial of a single subject (163,842 x 750 x 40) 
-- Input: `beta_matrix_new_roi.csv`
-- Output: 7x40 ROI-based RDMs (CSV) at `data/all_session_rdms.npy`, 40 RSA matrices at `data/all_session_rsa_matrices.npy`
+- Input: `\data\lh.betas_session*.csv`
+- Output: 7x40 ROI-based RDMs at `data/all_session_rdms.npy`, 40 RSA matrices at `data/all_session_rsa_matrices.npy`
 - Metric: Spearman correlation distance (1 - ρ)
 - Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance on full 40 sessions of a single subject. AND all RSA matrices performed on the given ROIs.
+
+#### `nsd_to_7roi_RSA.py` 
+- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
+- Input: `\data\lh.betas_session*.csv`
+- Output: 7 big ROI-based RDMs (downsampled) at `data/RDM_*ROI*_heatmap.png`, 1 RSA matrices visualized
+- Metric: Spearman correlation distance (1 - ρ)
 
 
 ### 2. To read/ transfer your data:

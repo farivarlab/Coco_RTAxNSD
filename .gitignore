@@ -6,3 +6,4 @@ nsd_stimuli.hdf5
 readRegionCSV.py
 .DS_Store
 all_session*
+RDM_*.png
