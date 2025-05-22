@@ -1,5 +1,5 @@
 # run after bootstarp_pd.r, rhdf5_stimuli.r
-rdm_str <- "V3"
+rdm_str <- "V4"
 rdm1 <- as.matrix(dist(rdm_list[[rdm_str]]))
 
 valid_cycles <- h1_cycles #because we need exact trial indices, we don't filter empty cycles.

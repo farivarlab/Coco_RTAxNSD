@@ -19,11 +19,11 @@ from scipy.stats import rankdata
 from sklearn.metrics import pairwise_distances
 
 def compute_rdm(matrix, indices=None):
-    sampled_matrix = matrix[indices, :]
+    sampled_matrix = matrix[indices, :].astype(np.float32) #switch to single precision to save memory
     # Rank each row individually (Spearman step)
-    ranked = np.apply_along_axis(rankdata, 1, sampled_matrix)
+    ranked = np.apply_along_axis(rankdata, 1, sampled_matrix).astype(np.float32)
     # Then use Pearson on the ranked matrix to get Spearman distances
-    rdm = pairwise_distances(ranked, metric='correlation')
+    rdm = pairwise_distances(ranked, metric='correlation').astype(np.float32)
     return rdm, indices
     
 
@@ -49,7 +49,7 @@ def compute_and_save_roi_rdms(base_path, roi_path, roi_labels_txt, selected_rois
     for session_idx in range(1, n_sessions + 1):
         beta_file = join(base_path, f"lh.betas_session{session_idx:02d}.mgh")
         try:
-            betas = nib.load(beta_file).get_fdata()
+            betas = nib.load(beta_file).get_fdata().astype(np.float32)
         except FileNotFoundError:
             print(f"❌ Session {session_idx:02d} not found. Skipping.")
             continue
@@ -67,19 +67,19 @@ def compute_and_save_roi_rdms(base_path, roi_path, roi_labels_txt, selected_rois
                 print(f"❌ No vertices found for ROI {roi}")
                 continue
 
-            roi_betas = betas[:, roi_indices]  # (n_images, n_roi_nodes)
+            roi_betas = betas[:, roi_indices].astype(np.float32)  # (n_images, n_roi_nodes)
             roi_responses[roi].append(roi_betas)
             print(f"✅ Accumulated data across {session_idx} sessions for {roi}")
     
     
-    # Compute RDMs and plot all in one figure
-    n_rois = len(selected_rois)
+    # Compute RDMs and save
+    import math
+    n_plots = len(selected_rois)
     ncols = 4
-    nrows = int(np.ceil(n_rois / ncols))
-
-    fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(4*ncols, 4*nrows))
+    nrows = math.ceil(n_plots / ncols)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4*ncols, 4*nrows))
     axes = axes.flatten()
-
+    
     for i, roi in enumerate(selected_rois):
         if len(roi_responses[roi]) == 0:
             print(f"⚠️ No data collected for ROI {roi}")
@@ -90,24 +90,28 @@ def compute_and_save_roi_rdms(base_path, roi_path, roi_labels_txt, selected_rois
         
         rdm, _ = compute_rdm(all_data, indices=selected_indices)
         roi_rmds[roi] = rdm
-
+        
         if download_npy:
-            np.save(join(base_path, f"RDM_{roi}.npy"), rdm)
-
+            np.save(join(base_path, f"{roi}_RDM.npy"), rdm)
+            
+        # save as csv for bootstarp
+        pd.DataFrame(rdm).to_csv(join(base_path, f"{roi}_RDM.csv"), index=False, header = False)
+ 
         ax = axes[i]
-        sns.heatmap(rdm, cmap='viridis', ax=ax, cbar=False)
-        ax.set_title(f"{roi}")
+        sns.heatmap(rdm, cmap='viridis', ax=ax, cbar=True)        
+        ax.set_title(f"RDM: {roi}")
         ax.axis('off')
-
+        
         print(f"📁 Computed RDM for {roi}")
         
     # Remove any empty subplots
     for j in range(i+1, nrows*ncols):
         fig.delaxes(axes[j])
-
+        
     plt.tight_layout()
-    plt.savefig(join(base_path, "All_RDMs_combined.png"))
+    plt.savefig(join(base_path, "all_RDMs_combined.png"))
     plt.show()
+    plt.close(fig)
     
     return roi_rmds
 
@@ -133,4 +137,4 @@ plt.figure(figsize=(8, 6))
 sns.heatmap(rsa_df, annot=True, cmap="coolwarm", vmin=0, vmax=1)
 plt.title("RSA (Spearman) between ROIs")
 plt.tight_layout()
-plt.show()            
+plt.show()

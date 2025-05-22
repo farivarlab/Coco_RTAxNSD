@@ -44,7 +44,7 @@ visualize_h1_images <- function(nsdIDs, ncol) {
   grid.arrange(grobs = img_list, ncol = ncol) 
 }
 # check one of the feature with images
-visualize_h1_images(unique(h1_nsdIDs[[2]]), ncol = 3)
+visualize_h1_images(unique(h1_nsdIDs[[1]]), ncol = 3)
 
 
 
