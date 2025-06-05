@@ -1,0 +1,15 @@
+.venv
+.RData
+.Rhistory
+aws*
+data
+report
+beta*
+simulated*
+Glasser*
+nsd_stim*
+nsdtransfer*
+read*
+*sql
+*mat
+tda_results
