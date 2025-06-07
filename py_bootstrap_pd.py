@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import pydory as dory
 from persim import plot_diagrams
 import csv
+from tdads.PH_utils import enclosing_radius
+
 
 # -------- SETTINGS --------
 rdm_dir = "data"
@@ -14,22 +16,19 @@ roi = "V1"  # Example ROI; change or loop over ROIs as needed
 file_path = os.path.join(rdm_dir, f"{roi}_RDM.npy")
 
 # -------- FUNCTIONS --------
-def enclosing_radius(rdm):
-    """
-    Compute enclosing radius cutoff for thresholding RDM.
-    Here: min of the max distances per point.
-    """
-    max_dists = np.max(rdm, axis=1)
-    radius = np.min(max_dists)
-    return radius
+
 
 
 def threshold_rdm_to_edge_list(rdm, cutoff, output_dir, chunk_size=1000):
     """
-    Convert a large RDM to an edge list CSV (distance ≤ cutoff) in a memory-safe way.
+    Convert a large RDM to an edge list (only distances ≤ cutoff).
+    Output: Sparse edge list with float32 precision, reduced memory usage.
     """
     n = rdm.shape[0]
     edge_list_path = os.path.join(output_dir, f"{roi}_edge_list.csv")
+
+    kept_edges = 0
+    total_possible = (n * (n - 1)) // 2
 
     with open(edge_list_path, "w", newline='') as f:
         writer = csv.writer(f)
@@ -38,13 +37,16 @@ def threshold_rdm_to_edge_list(rdm, cutoff, output_dir, chunk_size=1000):
             block = rdm[i_start:i_end]
             for i_local, row in enumerate(block):
                 i = i_start + i_local
-                for j in range(i + 1, n):  # Only upper triangle
-                    val = row[j]
+                for j in range(i + 1, n):  # Upper triangle
+                    val = float(row[j])
                     if val <= cutoff:
-                        writer.writerow([i, j, val])
+                        writer.writerow([i, j, f"{val:.4f}"])
+                        kept_edges += 1
 
-    print(f"Edge list written to {edge_list_path}")
+    print(f"✅ Edge list saved to {edge_list_path}")
+    print(f"💾 Kept {kept_edges} edges ({kept_edges/total_possible:.2%} of total)")
     return edge_list_path
+
 
 
 def run_tda(edge_lista_path, roi, output_dir, cutoff, maxdim=1):
@@ -61,7 +63,7 @@ def run_tda(edge_lista_path, roi, output_dir, cutoff, maxdim=1):
     source = edge_lista_path
     lower_thresh = 0
     thresh = cutoff
-    filetype = 2  # distance matrix
+    filetype = 2  # edge list
     threads = 1
     target = output_prefix
     dim = maxdim
@@ -118,10 +120,10 @@ def plot_save_diagrams(diagrams, roi, output_dir):
 
 # -------- MAIN --------
 print(f"Loading {roi} RDM...")
-rdm = np.load(file_path, mmap_mode='r')
+rdm = np.load(file_path, mmap_mode='r').astype(np.float32)
 
 print("Computing enclosing radius...")
-cutoff = enclosing_radius(rdm) * 0.7
+cutoff = enclosing_radius(rdm, distance_mat=True) * 0.5
 print(f"Enclosing radius cutoff: {cutoff}")
 
 print("Thresholding RDM...")
