@@ -6,7 +6,7 @@
 ---
 
 ## Project Summary  
-This repository contains data and scripts used for topological similarty analysis (TSA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course (COG 444). The project specifically focuses on **beta values of surface-based fMRI data** from the **first session of Subject 1**. 
+This repository contains data and scripts used for Representational topology analysis (RTA) and representational similarity analysis (RSA) of the Natural Scenes Dataset (NSD) done as my Cognitive Science Honours Research Course (COG 444). The project specifically focuses on **beta values of surface-based fMRI data** from the **40 sessions of Subject 1**. 
 
 Analyses include generating ROI-based Representational Dissimilarity Matrices (RDMs), bootstrapping topological features of Persistence Diagrams (PD), and stimulus-trial-matching for further Vietoris-Rips (VR) graph visualization.
 ### Important Links
@@ -164,3 +164,5 @@ Reads `nsd.experiment.mat` in MATLAB `.mat` format.
 3. Allen, E.J., St-Yves, G., Wu, Y. et al. (2022). A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence.Nat Neurosci 25, 116–126. https://doi.org/10.1038/s41593-021-00962-x
 4. Atlases — neuroimaging core 0.1.1 documentation. (n.d.). Retrieved from https://neuroimaging-core-docs.readthedocs.io/en/latest/pages/atlases.html#id4
 5. Brown, S., & Farivar, R. (2025, January 20). Machine Learning and Inference for Topological Data Analysis. Retrieved from https://cran.r-project.org/web/packages/TDApplied/vignettes/ML_and_Inference.html
+6. Pydory https://github.com/nihcompmed/Dory/tree/main
+7. tdads https://github.com/shaelebrown/tdads/blob/main/src/tdads/PH_utils.py
