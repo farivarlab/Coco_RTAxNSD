@@ -1,10 +1,24 @@
 #ignore folders
-lh.betas_session*
 beta_matrix_new_roi*
 nsd_stimuli.hdf5
 .Rprofile
 readRegionCSV.py
+nsd_to_averageRSA*
 .DS_Store
 all_*
 RDM_*.png
 *_RDM.csv
+.venv
+.RData
+.Rhistory
+aws*
+data
+beta*
+simulated*
+Glasser*
+nsd_stim*
+nsdtransfer*
+read*
+*sql
+*mat
+tda_results

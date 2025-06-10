@@ -21,16 +21,9 @@ Analyses include generating ROI-based Representational Dissimilarity Matrices (R
 
 ## Folder
 
-### `RDMs/`  
-Contains 7 RDMs (Representational Dissimilarity Matrices) produced by `produce_RDM.py`.  
-- Format: CSV  
-- Naming Convention: `[ROI]_RDM.csv` (e.g., `LO2_RDM.csv`)  
-- Content: Symmetric matrices containing pairwise Spearman correlation distances (1 - Spearman ρ) between trials within a given ROI (7 ROIs are chosen in this case).
-- ROIs chosen: Primary Visual Cortex (V1), Second Visual Area (V2), Third Visual Area (V3), Fourth Visual Area (V4), Eighth Visual Area (V8), Area Lateral Occipital 2 (Lo2), and Posterior-Infero-Temporal Complex (PIT).
-
 ### `report/`
 Contains everything related to final report and poster for this project.
-- `Coco_FinalReport_finalV.pdf`
+- `Coco_Final_Report_202506_.pdf`
 - `Coco_poster_finalV.pdf`
 - #### `results_plots/`
   - Includes all images and plots produced and used for analysis and final report
@@ -39,12 +32,6 @@ Contains everything related to final report and poster for this project.
 
 
 ## Key Tables  
-
-### `beta_matrix_new_roi.csv.zip` (2.4GB)  
-- Shape: `[#Nodes 163,842 x #Trials 750]`  
-- Description: Beta values of Subject 1’s first session, matched to ROIs based on the `lh.HCP_MMP1.mgz` atlas.  
-- Unit: fMRI beta values (no specific physical unit, normalized activation).  
-- Each row = node/vertex (163,842), each column = image trial (750).
 
 ### `nsd_stim_info_merged.csv`  
 - Contains important information about the matching between trial and NSD image stimuli  
@@ -55,7 +42,7 @@ Contains everything related to final report and poster for this project.
 - Includes descriptions and cortical locations of the 180 ROIs defined in the Glasser HCP-MMP1.0 parcellation.
 
 ### `subj1_trial_mapping.csv`  
-- Contains the trial to NSD image ID mapping for subj1.
+- Contains the trial to NSD image ID mapping for Subject 1.
 - 2 Columns:  
   - `trial_number`: trial index used in scripts  
   - `nsd_image_number`: image ID (0–72999) corresponding to NSD stimuli
@@ -86,42 +73,36 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 ## Python 
 ### 1. 🌟 To calculate your data:
-#### `nsd_to_csv.py` 
-- Scale: single trial of a single subject (163,842 x 750) 
-- Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
-- Outputs: `beta_matrix_new_roi.csv`  _(table already provided)_
-- Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
 
 
 #### `nsd_to_RDM_RSA_single.py`  
-- Scale: single trial of a single subject (163,842 x 750)
+- Scale: single trial of Subject 1 (163,842 x 750)
 - Input: `beta_matrix_new_roi.csv`
 - Output: 7 ROI-based RDMs (CSV), 1 RSA matrices 
 - Metric: Spearman correlation distance (1 - ρ)
 - Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance on a single session of a subject. AND perform RSA on the given ROIs.
 
-#### `nsd_to_RDM_RSA_full.py` 
-- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
+#### `nsd_to_7RDM.py` 
+- Scale: 40 trial of Subject 1 (163,842 x 750 x 40) 
 - Input: `\data\lh.betas_session*.csv`
-- Output: 7x40 ROI-based RDMs at `data/all_session_rdms.npy`, 40 RSA matrices at `data/all_session_rsa_matrices.npy`
-- Metric: Spearman correlation distance (1 - ρ)
-- Task: produce RDMs given selected ROIs (7 are selected here) based on Spearman correlation distance on full 40 sessions of a single subject. AND all RSA matrices performed on the given ROIs.
-
-#### `nsd_to_7roi_RSA.py` 
-- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
-- Input: `\data\lh.betas_session*.csv`
-- Output: 7 big ROI-based RDMs (downsampled) at `data/RDM_*ROI*_heatmap.png`, 1 RSA matrices visualized
+- Output: 7 big ROI-based RDMs at `data/{rois}_RDM.npy`
 - Metric: Spearman correlation distance (1 - ρ)
 
+#### `7RDM_RSA.py` 
+- Scale: 7 RDMs calculated over 40 trial of Subject 1 (7 x 30,000 x 30,000) 
+- Input: 7 `{rois}_RDM.npy` calculated from `nsd_to_7RDM.py`
+- Output: `rsa_matrix.npy` across 7 RDMs
+
+👉 Use `plot_matrix.py` below for RSA and RDM visualization.
 
 ### 2. To read/ transfer your data:
-#### `visualize_RDM_full.py`  
-- Scale: single trial of a single subject (163,842 x 750), 40 trial of a single subject (163,842 x 750 x 40)
-- Inputs: `all_session_rdms.npy`,`all_session_rsa_matrices.npy`
-- Outputs: visualization of single session RSA, RDM of a single ROI, or all of them  
+#### `plot_matrix.py`  
+- Inputs: `{roi}_RDM.npy` calculated from `nsd_to_7RDM.py`
+- Outputs: rsa_heatmap.png from `plot_rsa_heatmap()`, `plot_all_rdms()`
+- Task: Visualize the RSA npy matrix as a heatmap
 
 #### `nsd_stim_info_transfer.py`  
-- Scale: single trial of a single subject (163,842 x 750)
+- Scale: single trial of Subject 1 (163,842 x 750)
 - Inputs: `nsd_stim_info_merged.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data preprocessing. 
@@ -130,16 +111,23 @@ Generates separate VR (Vietoris-Rips) graphs for each topological feature (e.g.,
 
 
 #### `nsdtransfer.py`  
-- Scale: single trial of a single subject (163,842 x 750)
+- Scale: single trial of Subject 1 (163,842 x 750)
 - Inputs: `beta_matrix_new_roi.csv`
 - Outputs: None  
 - Task: Transfers the beta values table to Azure Data Studio SQL Server database for data inspection and manipulation.
 
 
 ### 3. Helper functions:
+
+#### `nsd_to_csv.py` 
+- Scale: single trial of Subject 1 (163,842 x 750) 
+- Inputs: `lh.betas_session01.mgh`, `lh.HCP_MMP1.mgz`  
+- Outputs: `beta_matrix_new_roi.csv`  _(table already provided)_
+- Task: Matches node-wise beta values to cortical ROIs using the HCP_MMP1 atlas and stores into a new csv
+
 #### `checkShape.py`  
-- Scale: 40 trial of a single subject (163,842 x 750 x 40) 
-- Purpose: Accesses metadata such as timing, image presentation order, etc.
+- Scale: 40 trial of Subject 1 (163,842 x 750 x 40)
+- Purpose: Inspect the shape of the files saved under /data
 
 #### `readpkl.py`  
 Reads `nsd.experiment.mat` in MATLAB `.mat` format.  
